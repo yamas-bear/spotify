@@ -12,7 +12,7 @@ $session = new SpotifyWebAPI\Session(
 
 $api = new SpotifyWebAPI\SpotifyWebAPI();
 $session->requestCredentialsToken();
-$accessToken = $session->getAccessToken();
+$accessToken = $session->getAccessToken(); 
 $api->setAccessToken($accessToken);
 
 //niziu
