@@ -1,6 +1,12 @@
 <?php
 //コマンドについては以下参照
 //https://github.com/jwilsson/spotify-web-api-php/blob/master/docs/method-reference/SpotifyWebAPI.md#getmytop
+//niziu
+//https://open.spotify.com/artist/3z8diLlUCkN1j9N9ZdnfBJ?si=B_NYvwyZRR-ErGuOSC83Tg
+//step and step
+//https://open.spotify.com/track/5DgAgJbHcm74RyA9YKj6k1?si=FFmuzottS1OoqqpFF-PGKw
+// ['artists']['items'][0]['uri']
+
 require 'vendor/autoload.php';
 
 $session = new SpotifyWebAPI\Session(
@@ -15,20 +21,15 @@ $session->requestCredentialsToken();
 $accessToken = $session->getAccessToken(); 
 $api->setAccessToken($accessToken);
 
-//niziu
-//https://open.spotify.com/artist/3z8diLlUCkN1j9N9ZdnfBJ?si=B_NYvwyZRR-ErGuOSC83Tg
-//step and step
-//https://open.spotify.com/track/5DgAgJbHcm74RyA9YKj6k1?si=FFmuzottS1OoqqpFF-PGKw
+$artist_name = "mol-74";
+$target_artist = $api->search('artist:'.$artist_name.'','artist');
+$target_artist = get_object_vars($target_artist);//オブジェクトを配列に変換
+// $related_artists = $api->getArtistRelatedArtists('3z8diLlUCkN1j9N9ZdnfBJ');//関連するアーティスト(直接uriで検索)
+$related_artists = $api->getArtistRelatedArtists($target_artist['artists']->items[0]->uri);//関連するアーティスト(アーティストの名前で検索をかけ、その結果取得したuriで検索)
 
-// $artists = $api->getArtistAlbumss('3z8diLlUCkN1j9N9ZdnfBJ?si=B_NYvwyZRR-ErGuOSC83Tg');
-$related_artists = $api->getArtistRelatedArtists('3z8diLlUCkN1j9N9ZdnfBJ?si=B_NYvwyZRR-ErGuOSC83Tg');
-$analysis = $api->getAudioAnalysis('5DgAgJbHcm74RyA9YKj6k1?si=FFmuzottS1OoqqpFF-PGKw');
-// print_r($analysis->track);
-print_r($related_artists);
-// // foreach ($artists->artists as $artist) {
-// //     echo '<b>' . $artist->name . '</b> <br>';
-// // }
-// echo $artists.string;
-
+print_r($target_artist['artists']->items[0]->name."\n");
+foreach($related_artists->artists as $related_artist){
+    print_r($related_artist->name."\n");
+}
 ?>
 
